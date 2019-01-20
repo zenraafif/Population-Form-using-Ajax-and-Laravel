@@ -14,8 +14,21 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/register', 'formController@Register');
+Route::get('/asd', 'formController@Register');
 
 
 Route::get('myform', 'formController@myform');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'formController@selectAjax']);
+
+Route::get('/register', 'formController@index');
+
+Route::get('register/fetch', 'formController@fetch')->name('register.fetch');
+
+
+
+Route::get('/provinsi', 'ApiController@provinsi');
+Route::get('/kota/provinsi/{id_provinsi}', 'ApiController@kotaProvinsi');
+Route::get('/kota', 'ApiController@kota');
+Route::get('/kecamatan/kota/{id_kota}', 'ApiController@kecamatanKota');
+Route::get('/kecamatan', 'ApiController@kecamatan');
+Route::get('/kelurahan', 'ApiController@kelurahan');

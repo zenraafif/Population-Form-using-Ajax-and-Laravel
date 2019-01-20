@@ -8,24 +8,34 @@ use DB;
 
 class formController extends Controller
 {
-    public function myform()
-        {
-        	$countries = DB::table('countries')->pluck("name","id")->all();
-        	return view('register',compact('countries'));
+        
+        public function Register(){
+            return view('register');           
         }
 
 
-        /**
-         * Show the application selectAjax.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function selectAjax(Request $request)
+        
+        public function index()
         {
-        	if($request->ajax()){
-        		$states = DB::table('states')->where('id_country',$request->id_country)->pluck("name","id")->all();
-        		$data = view('ajax-select',compact('states'))->render();
-        		return response()->json(['options'=>$data]);
-        	}
+         $provinsis = \App\Provinsi::all();
+         return view('register')->with('provinsis', $provinsis);
         }
+
+        public function fetch(Request $request)
+        {
+         $select = $request->get('select');
+         $value = $request->get('value');
+         $dependent = $request->get('dependent');
+         $data = DB::table('country_state_city')
+           ->where($select, $value)
+           ->groupBy($dependent)
+           ->get();
+         $output = '<option value="">Select '.ucfirst($dependent).'</option>';
+         foreach($data as $row)
+         {
+          $output .= '<option value="'.$row->$dependent.'">'.$row->$dependent.'</option>';
+         }
+         echo $output;
+        }
+
 }
