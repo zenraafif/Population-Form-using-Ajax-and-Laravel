@@ -26,9 +26,31 @@ Route::get('register/fetch', 'formController@fetch')->name('register.fetch');
 
 
 
+
+
+
+
+
+
+
+
 Route::get('/provinsi', 'ApiController@provinsi');
 Route::get('/kota/provinsi/{id_provinsi}', 'ApiController@kotaProvinsi');
+
 Route::get('/kota', 'ApiController@kota');
 Route::get('/kecamatan/kota/{id_kota}', 'ApiController@kecamatanKota');
+
 Route::get('/kecamatan', 'ApiController@kecamatan');
+Route::get('kelurahan/kecamatan/{id_kecamatan}', 'ApiController@kelurahanKecamatan');
+
 Route::get('/kelurahan', 'ApiController@kelurahan');
+
+Route::post('/tambahPenduduk', 'formController@tambahPenduduk');
+
+Route::get('/penduduk', 'formController@tampilkanPenduduk');
+
+Route::post('/edit-penduduk', 'formController@editPenduduk');
+
+Route::post('/hapus-penduduk', 'formController@hapusPenduduk');
+
+Route::delete('/user/delete/{id}', 'formController@destroy');

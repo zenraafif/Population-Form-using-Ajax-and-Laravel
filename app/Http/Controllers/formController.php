@@ -2,17 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Data;
+use Validator;
+use Illuminate\Support\Facades\Input;
+use Request;
 use Response;
 use DB;
 
+
 class formController extends Controller
 {
-        
+
+        public function tambahPenduduk(){
+           $nama            = Request::input('nama');
+           $tempat_lahir    = Request::input('tempat_lahir');
+           $tanggal_lahir   = Request::input('tanggal_lahir');
+           $jenis_kelamin   = Request::input('jenis_kelamin');
+           $provinsi        = Request::input('provinsi');
+           $kota            = Request::input('kota');
+           $kecamatan       = Request::input('kecamatan');
+           $kelurahan       = Request::input('kelurahan');
+           $alamat_lengkap  = Request::input('alamat_lengkap');
+           $nik             = Request::input('nik');
+           $no_kk           = Request::input('no_kk');
+
+           $save['nama']            = $nama;   
+           $save['nik']             = $nik;   
+           $save['no_kk']           = $no_kk;   
+           $save['tempat_lahir']    = $tempat_lahir; 
+           $save['tanggal_lahir']   = $tanggal_lahir;   
+           $save['jenis_kelamin']   = $jenis_kelamin;   
+           $save['id_provinsi']     = $provinsi;   
+           $save['id_kota']         = $kota;   
+           $save['id_kecamatan']    = $kecamatan;   
+           $save['id_kelurahan']    = $kelurahan;   
+           $save['alamat']          = $alamat_lengkap;   
+
+
+           $action = DB::table('penduduk')->insert($save);
+
+        }
+
+        public function tampilkanPenduduk(Request $request) {
+            $penduduks = \App\penduduk::all();
+
+            $arr['penduduks'] = $penduduks;
+            return view ( 'penduduk', $arr );
+        }
+        public function editPenduduk(Request $req)
+            {
+                $data = Penduduk::find($req->id);
+                $data->name = $req->name;
+                $data->save();
+                return response()->json($data);
+            }
+        public function hapusPenduduk(Request $req)
+            {
+                Penduduk::find($req->id)->delete();
+                return response()->json();
+            }
+
+
         public function Register(){
             return view('register');           
         }
 
+        public function destroy($id)
+        {   //For Deleting Users
+            $deleted =  Penduduk::find($id)->delete();
+            if($deleted){
+                return true;
+            }
+        }
 
         
         public function index()

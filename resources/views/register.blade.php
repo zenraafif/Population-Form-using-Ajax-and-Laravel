@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Register</title>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/mystyle.css') }}">
 	<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
@@ -27,43 +28,45 @@
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<form>
+					<form method="POST" class="form_penduduk">
 						<div class="form-group">
 							<label for="name">Nama</label>
-							<input type="email" class="form-control" id="name" placeholder="nama anda">
+							<input name="nama" type="text" class="form-control" id="name" placeholder="nama Anda">
+						</div>
+						<div class="form-group">
+							<label for="nik">Nik</label>
+							<input name="nama" type="number" class="form-control" id="nik" placeholder="Nomor induk kependudukan">
+						</div>
+						<div class="form-group">
+							<label for="no_kk">No. KK</label>
+							<input name="nama" type="number" class="form-control" id="no_kk" placeholder="Nomor kartu keluarga">
 						</div>
 						<div class="form-group">
 							<label for="exampleFormControlInput1">Alamat E-mail</label>
-							<input type="email" class="form-control" id="exampleFormControlInput1" placeholder="nama@contoh.com">
+							<input name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="nama@contoh.com">
 						</div>
 						<div class="form-group">
 							<label for="tempat_lahir">Tempat Lahir</label>
-							<input type="text" class="form-control" id="tempat_lahir" placeholder="tempat lahir">
+							<input name="tempat_lahir" type="text" class="form-control" id="tempat_lahir" placeholder="tempat lahir">
 						</div>
 						<div class="form-group">
 							<label for="tanggal_lahir">Tanggal Lahir</label>
-							<input type="date" class="form-control" id="tanggal_lahir" placeholder="dd/mm/yy">
+							<input name="tanggal_lahir" type="date" class="form-control" id="tanggal_lahir" placeholder="dd/mm/yy">
 						</div>
 						<div class="form-group">
 							<label for="gender">Jenis kelamin</label>
-							<select class="form-control" id="gender">
+							<select name="jenis_kelamin" class="form-control" id="gender">
 								<option value="laki-laki">laki-laki</option>
 								<option value="perempuan">perempuan</option>
 							</select>
 						</div>
-					{{--  --}}
-						<div class="form-group">
-							<label for="alamat">Alamat</label>
-							<textarea class="form-control" id="alamat" rows="3" placeholder="alamat"></textarea>
-						</div>
-					{{--  --}}
 
 
 					{{-- tempat tinggal --}}
 						<div class="form-group">
 							<label for="provinsi">Provinsi</label>
 							<select name="provinsi" id="provinsi" class="form-control input-lg dynamic" data-dependent="kota">
-								<option value="">Pilih Provinsi</option>
+								<option value="">-- Pilih Provinsi --</option>
 								@foreach($provinsis as $provinsi)
 								<option value="{{ $provinsi->id}}">{{ $provinsi->nama }}</option>
 								@endforeach
@@ -72,78 +75,167 @@
 						<div class="form-group" >
 							<label for="kota">Kota</label>
 							<select name="kota" id="kota" class="form-control input-lg dynamic" data-dependent="kecamatan">
-								<option value="">Pilih Kota</option>
+								<option value="">-- Pilih Kota --</option>
 							</select>
 						</div>
-						<div class="form-group mb-5">
+						<div class="form-group">
 							<label for="gender">Kecamatan</label>
 							<select name="kecamatan" id="kecamatan" class="form-control input-lg">
-								<option value="">Pilih Kecamatan</option>
+								<option value="">-- Pilih Kecamatan --</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="kelurahan">Kelurahan</label>
+							<select name="kelurahan" id="kelurahan" class="form-control input-lg">
+								<option value="">-- Pilih Kelurahan --</option>
 							</select>
 						</div>
 					{{-- tempat tinggal --}}
 
 
+					{{--  --}}
+						<div class="form-group">
+							<label for="alamat">Alamat Lengkap</label>
+							<textarea name="alamat_lengkap" class="form-control" id="alamat" rows="3" placeholder="alamat"></textarea>
+						</div>
+					{{--  --}}
 						{{ csrf_field() }}
 					</form>
+						<input type="button" name="kirim" class="kirim" id="kirim" value="kirim">
 				</div>
 			</div>
 		</div>	
 	</section>
+	<span class="loading"></span>
 	<div id="destination"></div>
+	<div class="mb-5 pb-5"></div>
+
+
 	<script>
 
 		var homeUrl = 'http://localhost/formajax/public';
 		$(document).ready(function(){
 
-			$('#provinsi').change(function(){
-				$('#kota').val('');
-				$('#kota').html('<option value="">Pilih Kota</option>');
-				$('#kecamatan').html('<option value="">Pilih kecamatan</option>');
-				$('#kelurahan').html('<option value="">Pilih kelurahan</option>');
-				$('#kecamatan').val('');
-				$('#kelurahan').val('');
+// PARENT SELECT
+				// SELECT KOTA
+					$('#provinsi').change(function(){
+						$('#kota').val('');
+						$('#kota').html('<option value="">-- Pilih Kota --</option>');
+						$('#kecamatan').html('<option value="">-- Pilih kecamatan --</option>');
+						$('#kelurahan').html('<option value="">-- Pilih kelurahan --</option>');
+						$('#kecamatan').val('');
+						$('#kelurahan').val('');
 
-				var id_provinsi = $('#provinsi').val();
+						var id_provinsi = $('#provinsi').val();
 
-				$.ajax({
-				  url: 'http://localhost/formajax/public/kota/provinsi/'+id_provinsi,
-				}).done(function(data) {
-					kotas = JSON.parse(data);//rubah data dari string ke json
+						$.ajax({
+						  url: 'http://localhost/formajax/public/kota/provinsi/'+id_provinsi,
+						}).done(function(data) {
+							kotas = JSON.parse(data);//rubah data dari string ke json
 
-					var toAppend = '';
-					for(var i=0;i<kotas.length;i++){
-						toAppend += '<option value="'+kotas[i]['id']+'">'+kotas[i]['nama']+'</option>';
-					}
-					console.log(toAppend);
-					$('#kota').append(toAppend);
-				});
+							var toAppend = '';
+							for(var i=0;i<kotas.length;i++){
+								toAppend += '<option value="'+kotas[i]['id']+'">'+kotas[i]['nama']+'</option>';
+							}
+							// console.log(toAppend);
+							$('#kota').append(toAppend);
+						});
+					});
+				// SELECT KOTA
+				
+				//SELECT KECAMATAN 
+					$('#kota').change(function(){
+						$('#kecamatan').val('');
+						$('#kelurahan').val('');
+						$('#kecamatan').html('<option value="">Pilih kecamatan</option>');
+						$('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
+
+						var id_kota = $('#kota').val();
+
+						$.ajax({
+						  url: 'http://localhost/formajax/public/kecamatan/kota/'+id_kota,
+						}).done(function(data) {
+							kecamatans = JSON.parse(data);//rubah data dari string ke json
+							// console.log(kecamatans);
+							var toAppend = '';
+							for(var i=0;i<kecamatans.length;i++){
+								toAppend += '<option value="'+kecamatans[i]['id']+'">'+kecamatans[i]['nama']+'</option>';
+							}
+							// console.log(toAppend);
+							$('#kecamatan').append(toAppend);
+						});
+					});
+				// SELECT KECAMATAN
+				
+				// SELECT KELURAHAN
+					$('#kecamatan').change(function(){
+						$('#kelurahan').val('');
+						$('#kelurahan').html('<option value="">-- Pilih kelurahan --</option>');
+
+						var id_kecamatan = $('#kecamatan').val();
+
+
+						$.ajax({
+							url: 'http://localhost/formajax/public/kelurahan/kecamatan/'+id_kecamatan,
+						}).done(function(data){
+							kelurahans = JSON.parse(data);
+							console.log(kelurahans);
+
+							var toAppend='';
+							for (var i = 0; i < kelurahans.length; i++) {
+								toAppend += '<option value="'+kelurahans[i]['id']+'">'+kelurahans[i]['nama']+'</option>';
+							}
+							$('#kelurahan').append(toAppend);
+						})
+					});
+				// SELECT KELURAHAN
+// PARENT SELECT
+
+			$.ajaxSetup({
+			  headers: {
+			    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			  }
 			});
+			
+			$("#kirim").click(function() {
+			    var data = $('.form_penduduk').serialize();
 
-			$('#kota').change(function(){
-				$('#kecamatan').val('');
-				$('#kelurahan').val('');
-				$('#kecamatan').html('<option value="">Pilih kecamatan</option>');
-				$('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
+			    $.ajax({
+			        type: "POST",
+			        url: 'http://localhost/formajax/public/tambahPenduduk',
+			        data : data,
+			        beforeSend:function(){
+                    $(".loading").html("Please wait....");
+                  	},
+                  	complete: function(){
+                  	     $(".loading").hide();
+                  	   },
+                  	success:function(result){  
+      	             if(result){
+      	               
+      	               alert("Selamat, resgistari sukses");
+      	               window.location.href = "http://example.com/index.php";
+      	               
+      	             }else{
+      	               
+      	               alert("Registrasi sukses !");
+      	               // window.location.href = "http://localhost/formajax/public/penduduk";
+      	               $('#kota').val('');
+      	               $('option:selected').val('');
+      	               $('#kota').html('<option value="">-- Pilih Kota --</option>');
+      	               $('#kecamatan').html('<option value="">-- Pilih kecamatan --</option>');
+      	               $('#kelurahan').html('<option value="">-- Pilih kelurahan --</option>');
+      	               $('#provinsi').val('');
+      	               $('#kecamatan').val('');
+      	               $('#kelurahan').val('');
+      	               $('form input').val('');
+      	               $('textarea').val('');
 
-				var id_kota = $('#kota').val();
+      	             }
+      	             
+      	           },
 
-				$.ajax({
-				  url: 'http://localhost/formajax/public/kecamatan/kota/'+id_kota,
-				}).done(function(data) {
-					kecamatans = JSON.parse(data);//rubah data dari string ke json
-					console.log(kecamatans);
-					var toAppend = '';
-					for(var i=0;i<kecamatans.length;i++){
-						toAppend += '<option value="'+kecamatans[i]['id']+'">'+kecamatans[i]['nama']+'</option>';
-					}
-					console.log(toAppend);
-					$('#kecamatan').append(toAppend);
-				});
-			});
-
-			$('#kecamatan').change(function(){
-				$('#kelurahan').val('');
+			    })
 			});
 			
 

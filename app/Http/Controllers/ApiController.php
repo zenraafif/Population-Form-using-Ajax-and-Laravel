@@ -28,4 +28,7 @@ class ApiController extends Controller
     public function kecamatanKota($id_kota){
     	return \App\Kecamatan::where('id_kota', $id_kota)->get()->toJson();
     }
+    public function kelurahanKecamatan($id_kecamatan){
+    	return \App\Kelurahan::where('id_kecamatan', $id_kecamatan)->get()->toJson();
+    }
 }
