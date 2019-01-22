@@ -12,6 +12,10 @@
 	.mycenter{
 		margin: 0 auto;
 	}
+	body{
+		background: linear-gradient(to bottom left, #0033cc 0%, #66ccff 101%);
+		color: white;
+	}
 </style>
 </head>
 <body>
@@ -35,15 +39,11 @@
 						</div>
 						<div class="form-group">
 							<label for="nik">Nik</label>
-							<input name="nama" type="number" class="form-control" id="nik" placeholder="Nomor induk kependudukan">
+							<input name="nik" type="number" class="form-control" id="nik" placeholder="Nomor induk kependudukan">
 						</div>
 						<div class="form-group">
 							<label for="no_kk">No. KK</label>
-							<input name="nama" type="number" class="form-control" id="no_kk" placeholder="Nomor kartu keluarga">
-						</div>
-						<div class="form-group">
-							<label for="exampleFormControlInput1">Alamat E-mail</label>
-							<input name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="nama@contoh.com">
+							<input name="no_kk" type="number" class="form-control" id="no_kk" placeholder="Nomor kartu keluarga">
 						</div>
 						<div class="form-group">
 							<label for="tempat_lahir">Tempat Lahir</label>
@@ -56,6 +56,7 @@
 						<div class="form-group">
 							<label for="gender">Jenis kelamin</label>
 							<select name="jenis_kelamin" class="form-control" id="gender">
+								<option disabled selected value>-- Pilih Jenis Kelamin</option>
 								<option value="laki-laki">laki-laki</option>
 								<option value="perempuan">perempuan</option>
 							</select>
@@ -66,7 +67,7 @@
 						<div class="form-group">
 							<label for="provinsi">Provinsi</label>
 							<select name="provinsi" id="provinsi" class="form-control input-lg dynamic" data-dependent="kota">
-								<option value="">-- Pilih Provinsi --</option>
+								<option value="" disabled selected value>-- Pilih Provinsi --</option>
 								@foreach($provinsis as $provinsi)
 								<option value="{{ $provinsi->id}}">{{ $provinsi->nama }}</option>
 								@endforeach
@@ -75,19 +76,19 @@
 						<div class="form-group" >
 							<label for="kota">Kota</label>
 							<select name="kota" id="kota" class="form-control input-lg dynamic" data-dependent="kecamatan">
-								<option value="">-- Pilih Kota --</option>
+								<option value="" disabled selected value>-- Pilih Kota --</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="gender">Kecamatan</label>
 							<select name="kecamatan" id="kecamatan" class="form-control input-lg">
-								<option value="">-- Pilih Kecamatan --</option>
+								<option value="" disabled selected value>-- Pilih Kecamatan --</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="kelurahan">Kelurahan</label>
 							<select name="kelurahan" id="kelurahan" class="form-control input-lg">
-								<option value="">-- Pilih Kelurahan --</option>
+								<option value="" disabled selected value>-- Pilih Kelurahan --</option>
 							</select>
 						</div>
 					{{-- tempat tinggal --}}
@@ -101,7 +102,7 @@
 					{{--  --}}
 						{{ csrf_field() }}
 					</form>
-						<input type="button" name="kirim" class="kirim" id="kirim" value="kirim">
+						<input class="btn btn-success " type="button" name="kirim" class="kirim" id="kirim" value="kirim">
 				</div>
 			</div>
 		</div>	
@@ -222,12 +223,10 @@
       	               // window.location.href = "http://localhost/formajax/public/penduduk";
       	               $('#kota').val('');
       	               $('option:selected').val('');
-      	               $('#kota').html('<option value="">-- Pilih Kota --</option>');
-      	               $('#kecamatan').html('<option value="">-- Pilih kecamatan --</option>');
-      	               $('#kelurahan').html('<option value="">-- Pilih kelurahan --</option>');
       	               $('#provinsi').val('');
       	               $('#kecamatan').val('');
       	               $('#kelurahan').val('');
+      	               $('#gender').val('');
       	               $('form input').val('');
       	               $('textarea').val('');
 

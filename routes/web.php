@@ -54,3 +54,5 @@ Route::post('/edit-penduduk', 'formController@editPenduduk');
 Route::post('/hapus-penduduk', 'formController@hapusPenduduk');
 
 Route::delete('/user/delete/{id}', 'formController@destroy');
+
+Route::post('/user/edit/{id}', 'formController@editPenduduk');

@@ -49,10 +49,16 @@ class formController extends Controller
             $arr['penduduks'] = $penduduks;
             return view ( 'penduduk', $arr );
         }
-        public function editPenduduk(Request $req)
-            {
-                $data = Penduduk::find($req->id);
-                $data->name = $req->name;
+        public function editPenduduk(Request $req, $id)
+            {   
+                $data = \App\Penduduk::findOrFail($id);
+                $data->nama = Request::input('nama');
+                $data->nik = Request::input('nik');
+                $data->no_kk = Request::input('no_kk');
+                $data->tempat_lahir = Request::input('tempat_lahir');
+                $data->tanggal_lahir = Request::input('tanggal_lahir');
+                $data->jenis_kelamin = Request::input('jenis_kelamin');
+                $data->alamat = Request::input('alamat');
                 $data->save();
                 return response()->json($data);
             }
@@ -68,11 +74,9 @@ class formController extends Controller
         }
 
         public function destroy($id)
-        {   //For Deleting Users
-            $deleted =  Penduduk::find($id)->delete();
-            if($deleted){
-                return true;
-            }
+        {   $deleted =  \App\Penduduk::find($id)->delete();
+            
+            return response()->json();
         }
 
         
