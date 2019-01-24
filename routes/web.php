@@ -56,3 +56,8 @@ Route::post('/hapus-penduduk', 'formController@hapusPenduduk');
 Route::delete('/user/delete/{id}', 'formController@destroy');
 
 Route::post('/user/edit/{id}', 'formController@editPenduduk');
+
+
+
+Route::match(['get', 'post'], 'ajax-image-upload', 'profileController@ajaxImage');
+Route::delete('ajax-remove-image/{filename}', 'profileController@deleteImage');

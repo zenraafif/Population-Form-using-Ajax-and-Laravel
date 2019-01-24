@@ -13,6 +13,7 @@
     crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <style type="text/css">
+
         body{
              background: linear-gradient(to top right, #0033cc 0%, #66ccff 101%);
              background-size: cover;
@@ -33,8 +34,10 @@
 </head>
 <body>
 
+{{-- JUDUL --}}
 <h1 class="text-center pt-5">Tabel Penduduk</h1>
 <hr width="100px" class="pb-5">
+
 
 {{-- TABEL PENDUDUK --}}
     <div class="container">
@@ -43,9 +46,10 @@
                     <table class="table table-borderless" id="table">
                         <thead>
                             <tr>
-                                <th class="text-center">No.</th>
+                                <th class="text-center">Gambar</th>
                                 {{-- <th class="text-center">Id</th> --}}
                                 <th class="text-center">Nama</th>
+                                <th class="text-center">Jenis Kelamin</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -54,11 +58,12 @@
                         @endphp
                         @foreach($penduduks as $item)
                         <tr class="item{{$item->id}}">
-                            <td id="nomor{{$i}}">{{$i}}</td>
+                            <td><img src="{{ asset("uploads/{$item->gambar}") }}" width="100px" height="100px" /></td>
                             {{-- <td>{{$item->id}}</td> --}}
-                            <td id="namas">{{$item->nama}}</td>
-                            <td><button class="edit-modal btn btn-info" data-id="{{$item->id}}"
-                                    data-name="{{$item->nama}}" data-nik="{{$item->nik}}" data-nokk="{{$item->no_kk}}" data-jeniskelamin="{{$item->jenis_kelamin}}" data-tempatlahir="{{$item->tempat_lahir}}" data-tanggallahir="{{$item->tanggal_lahir}}" data-alamat="{{$item->alamat}}">
+                            <td style="vertical-align: middle;">{{$item->nama}}</td>
+                            <td style="vertical-align: middle;">{{$item->jenis_kelamin}}</td>
+                            <td style="vertical-align: middle;"><button class="edit-modal btn btn-info" data-id="{{$item->id}}"
+                                    data-name="{{$item->nama}}" data-nik="{{$item->nik}}" data-nokk="{{$item->no_kk}}" data-jeniskelamin="{{$item->jenis_kelamin}}" data-tempatlahir="{{$item->tempat_lahir}}" data-tanggallahir="{{$item->tanggal_lahir}}" data-alamat="{{$item->alamat}}" data-gambar="uploads/{{$item->gambar}}">
                                     <span class="glyphicon glyphicon-edit"></span> Ubah
                                 </button>
                                 <button class="delete-modal btn btn-danger"
@@ -74,7 +79,8 @@
                 </div>
     </div>
 {{-- TABEL PENDUDUK --}}
-    
+
+{{-- MODAL --}}
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -84,6 +90,25 @@
                     <span><button type="button" class="close" data-dismiss="modal">&times;</button></span>
                 </div>
                 <div class="modal-body">
+                  <div id="modal-gambar">  
+                    <center>
+                        <div style="width:100px;height: 100px;text-align: center;position: relative" id="image">
+                            <img style="border-radius: 50%;" width="100%" height="100%" id="preview_image"/>
+                            <i id="loading" class="fa fa-spinner fa-spin fa-3x fa-fw" style="position: absolute;left: 40%;top: 40%;display: none"></i>
+                        </div>
+                        <p class="mt-2">
+                            <a href="javascript:changeProfile()" style="text-decoration: none; font-size: 12px;">
+                                <i class="fa fa-camera upload-button"></i> Ganti Profil
+                            </a>&nbsp;&nbsp;
+                            <a href="javascript:removeFile()" style="text-decoration: none; color: red; font-size: 12px;">
+                                <i class="fa fa-trash"></i> Hapus
+                                
+                            </a>
+                        </p>
+                        <input type="file" id="file" name="img" style="display: none"/>
+                        
+                    </center>
+                  </div>  
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="control-label col-sm-5" for="id">ID:</label>
@@ -154,10 +179,13 @@
             </div>
           </div>
         </div>
+{{-- MODAL --}}
 
+{{-- SCRIPT --}}
         <script type="text/javascript">
             $(document).ready(function() {
               $(document).on('click', '.edit-modal', function() {
+                    $('#modal-gambar').css('display', 'block');
                     $('#footer_action_button').text("Perbarui");
                     $('#footer_action_button').addClass('glyphicon-check');
                     $('#footer_action_button').removeClass('glyphicon-trash');
@@ -175,9 +203,12 @@
                     $('#tanggal_lahir').val($(this).data('tanggallahir'));
                     $('#gender').val($(this).data('jeniskelamin'));
                     $('#alamat').val($(this).data('alamat'));
+                     var namagambar = ($(this).data('gambar'));
+                    $('#preview_image').attr('src', namagambar);
                     $('#myModal').modal('show');
                 });
                 $(document).on('click', '.delete-modal', function() {
+                    $('#modal-gambar').css('display', 'none');
                     $('#footer_action_button').text(" Hapus");
                     $('#footer_action_button').removeClass('glyphicon-check');
                     $('#footer_action_button').addClass('glyphicon-trash');
@@ -222,6 +253,7 @@
                         url: 'http://localhost/formajax/public/user/edit/'+id,
                         data: {
                             '_token': $('input[name=_token]').val(),
+                            'gambar':$('#preview_image').val(),
                             'id': $("#fid").val(),
                             'nama': $('#n').val(),
                             'nik': $('#nik').val(),
@@ -233,41 +265,13 @@
 
                         },
                         success: function(data) {
-                                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + {{$i}} + "</td><td>" + data.nama + "</td><td><button class='edit-modal btn btn-info' data-id='" + data.id + "' data-name='" + data.nama + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.nama + "' ><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td><img width='100px' src=uploads/"+ data.gambar + "></td>  <td> " + data.nama + "</td><td>" + data.jenis_kelamin + "</td><td><button class='edit-modal btn btn-info' data-id='" + data.id + "' data-name='" + data.nama + "' data-nik='" + data.nik + "' data-nokk='" + data.no_kk + "' data-tempatlahir='" + data.tempat_lahir + "' data-tanggallahir='" + data.tanggal_lahir + "'data-jeniskelamin='" + data.jenis_kelamin + "' data-alamat='" + data.alamat + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.nama + "' ><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
                                     }
-                        // success: function(data) {
-                        //     var nama =$('#n').val();
-                        //     console.log(nama);
-                        //     $('#Table').find('tbody').text(nama);
-                        // }
                     });
                 });
             });
+{{-- SCRIPT --}}
 
-
-                // $("#add").click(function() {
-
-                //     $.ajax({
-                //         type: 'post',
-                //         url: '/addItem',
-                //         data: {
-                //             '_token': $('input[name=_token]').val(),
-                //             'name': $('input[name=name]').val()
-                //         },
-                //         success: function(data) {
-                //             if ((data.errors)){
-                //               $('.error').removeClass('hidden');
-                //                 $('.error').text(data.errors.name);
-                //             }
-                //             else {
-                //                 $('.error').addClass('hidden');
-                //                 $('#table').append("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.name + "</td><td><button class='edit-modal btn btn-info' data-id='" + data.id + "' data-name='" + data.name + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.name + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
-                //             }
-                //         },
-
-                //     });
-                //     $('#name').val('');
-                // });
         </script>
         <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

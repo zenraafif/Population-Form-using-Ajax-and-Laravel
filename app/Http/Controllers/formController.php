@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Data;
-use Validator;
 use Illuminate\Support\Facades\Input;
 use Request;
 use Response;
 use DB;
 
-
 class formController extends Controller
 {
 
         public function tambahPenduduk(){
+
+           $gambar          = Request::input('gambar');        
            $nama            = Request::input('nama');
            $tempat_lahir    = Request::input('tempat_lahir');
            $tanggal_lahir   = Request::input('tanggal_lahir');
@@ -26,6 +26,7 @@ class formController extends Controller
            $nik             = Request::input('nik');
            $no_kk           = Request::input('no_kk');
 
+           $save['gambar']          = $gambar;   
            $save['nama']            = $nama;   
            $save['nik']             = $nik;   
            $save['no_kk']           = $no_kk;   
@@ -79,7 +80,11 @@ class formController extends Controller
             return response()->json();
         }
 
-        
+
+
+
+
+
         public function index()
         {
          $provinsis = \App\Provinsi::all();
