@@ -6,12 +6,16 @@ use App\Data;
 use Illuminate\Support\Facades\Input;
 use Request;
 use Response;
+use Validator;
 use DB;
+use App\Http\Requests\TestRequest;
+
 
 class formController extends Controller
 {
-
-        public function tambahPenduduk(){
+    
+        public function tambahPenduduk(Request $request){
+            
 
            $gambar          = Request::input('gambar');        
            $nama            = Request::input('nama');
@@ -53,6 +57,7 @@ class formController extends Controller
         public function editPenduduk(Request $req, $id)
             {   
                 $data = \App\Penduduk::findOrFail($id);
+                $data->gambar = Request::input('gambar');  
                 $data->nama = Request::input('nama');
                 $data->nik = Request::input('nik');
                 $data->no_kk = Request::input('no_kk');

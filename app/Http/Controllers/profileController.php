@@ -13,7 +13,7 @@ class profileController extends Controller
                 {
                     if ($request->isMethod('get'))
                         return view('ajax_image_upload');
-                    else {
+                    else {	
                         $validator = Validator::make($request->all(),
                             [
                                 'file' => 'image',

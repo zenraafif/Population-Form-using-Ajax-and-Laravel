@@ -12,6 +12,8 @@
     rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
     crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> --}}
     <style type="text/css">
 
         body{
@@ -30,6 +32,9 @@
         h1{
             color: white;
         }
+        img{
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -46,7 +51,7 @@
                     <table class="table table-borderless" id="table">
                         <thead>
                             <tr>
-                                <th class="text-center">Gambar</th>
+                                <th class="text-center">Profil</th>
                                 {{-- <th class="text-center">Id</th> --}}
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Jenis Kelamin</th>
@@ -58,17 +63,19 @@
                         @endphp
                         @foreach($penduduks as $item)
                         <tr class="item{{$item->id}}">
-                            <td><img src="{{ asset("uploads/{$item->gambar}") }}" width="100px" height="100px" /></td>
+                            <td>
+                                    <img src="{{ asset("uploads/{$item->gambar}") }}" width="80px" height="80px" style="background-size: cover;" />
+                            </td>
                             {{-- <td>{{$item->id}}</td> --}}
                             <td style="vertical-align: middle;">{{$item->nama}}</td>
                             <td style="vertical-align: middle;">{{$item->jenis_kelamin}}</td>
-                            <td style="vertical-align: middle;"><button class="edit-modal btn btn-info" data-id="{{$item->id}}"
-                                    data-name="{{$item->nama}}" data-nik="{{$item->nik}}" data-nokk="{{$item->no_kk}}" data-jeniskelamin="{{$item->jenis_kelamin}}" data-tempatlahir="{{$item->tempat_lahir}}" data-tanggallahir="{{$item->tanggal_lahir}}" data-alamat="{{$item->alamat}}" data-gambar="uploads/{{$item->gambar}}">
-                                    <span class="glyphicon glyphicon-edit"></span> Ubah
+                            <td style="vertical-align: middle;"><button class="edit-modal btn btn-info btn-sm" data-id="{{$item->id}}"
+                                    data-name="{{$item->nama}}" data-nik="{{$item->nik}}" data-nokk="{{$item->no_kk}}" data-jeniskelamin="{{$item->jenis_kelamin}}" data-tempatlahir="{{$item->tempat_lahir}}" data-tanggallahir="{{$item->tanggal_lahir}}" data-alamat="{{$item->alamat}}" data-gambar="{{$item->gambar}}">
+                                    <span class="glyphicon glyphicon-edit"><i class="fas fa-edit"></i></span> Ubah
                                 </button>
-                                <button class="delete-modal btn btn-danger"
+                                <button class="delete-modal btn btn-danger btn-sm"
                                     data-id="{{$item->id}}" data-name="{{$item->nama}}">
-                                    <span class="glyphicon glyphicon-trash"></span> Hapus
+                                    <span class="glyphicon glyphicon-trash"><i class="fas fa-trash-alt"></i></span> Hapus
                                 </button></td>
                         </tr>
                         @php
@@ -110,6 +117,7 @@
                     </center>
                   </div>  
                     <form class="form-horizontal" role="form">
+                        <input type="hidden" id="file_name" name="gambar" />
                         <div class="form-group">
                             <label class="control-label col-sm-5" for="id">ID:</label>
                             <div class="col-sm-10">
@@ -172,7 +180,7 @@
                             <span id="footer_action_button" class='glyphicon'> </span>
                         </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
+                            <span class='glyphicon glyphicon-remove'><i class="fas fa-times"></i></span> Batal
                         </button>
                     </div>
                 </div>
@@ -189,6 +197,7 @@
                     $('#footer_action_button').text("Perbarui");
                     $('#footer_action_button').addClass('glyphicon-check');
                     $('#footer_action_button').removeClass('glyphicon-trash');
+                    $('#footer_action_button').html('<i class="fas fa-check"></i>Perbarui');
                     $('.actionBtn').addClass('btn-success');
                     $('.actionBtn').removeClass('btn-danger');
                     $('.actionBtn').addClass('edit');
@@ -203,8 +212,9 @@
                     $('#tanggal_lahir').val($(this).data('tanggallahir'));
                     $('#gender').val($(this).data('jeniskelamin'));
                     $('#alamat').val($(this).data('alamat'));
-                     var namagambar = ($(this).data('gambar'));
+                     var namagambar = 'uploads/'+($(this).data('gambar'));
                     $('#preview_image').attr('src', namagambar);
+                    $('#file_name').val($(this).data('gambar'));
                     $('#myModal').modal('show');
                 });
                 $(document).on('click', '.delete-modal', function() {
@@ -212,6 +222,7 @@
                     $('#footer_action_button').text(" Hapus");
                     $('#footer_action_button').removeClass('glyphicon-check');
                     $('#footer_action_button').addClass('glyphicon-trash');
+                    $('#footer_action_button').html('<i class="fas fa-trash-alt"></i>Hapus');
                     $('.actionBtn').removeClass('btn-success');
                     $('.actionBtn').addClass('btn-danger');
                     $('.actionBtn').addClass('delete');
@@ -253,7 +264,7 @@
                         url: 'http://localhost/formajax/public/user/edit/'+id,
                         data: {
                             '_token': $('input[name=_token]').val(),
-                            'gambar':$('#preview_image').val(),
+                            'gambar':$('#file_name').val(),
                             'id': $("#fid").val(),
                             'nama': $('#n').val(),
                             'nik': $('#nik').val(),
@@ -265,12 +276,78 @@
 
                         },
                         success: function(data) {
-                                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td><img width='100px' src=uploads/"+ data.gambar + "></td>  <td> " + data.nama + "</td><td>" + data.jenis_kelamin + "</td><td><button class='edit-modal btn btn-info' data-id='" + data.id + "' data-name='" + data.nama + "' data-nik='" + data.nik + "' data-nokk='" + data.no_kk + "' data-tempatlahir='" + data.tempat_lahir + "' data-tanggallahir='" + data.tanggal_lahir + "'data-jeniskelamin='" + data.jenis_kelamin + "' data-alamat='" + data.alamat + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-name='" + data.nama + "' ><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td><img width='80px' height='80px' style='vertical-align: middle;' src=uploads/"+ data.gambar + "></td>  <td  style='vertical-align: middle;'> " + data.nama + "</td><td style='vertical-align: middle;'>" + data.jenis_kelamin + "</td><td style='vertical-align: middle;'><button class='edit-modal btn btn-info btn-sm' data-id='" + data.id + "' data-name='" + data.nama + "' data-nik='" + data.nik + "' data-nokk='" + data.no_kk + "' data-tempatlahir='" + data.tempat_lahir + "' data-tanggallahir='" + data.tanggal_lahir + "'data-jeniskelamin='" + data.jenis_kelamin + "' data-alamat='" + data.alamat + "' data-gambar='" + data.gambar + "'><span class='glyphicon glyphicon-edit'><i class='fas fa-edit'></i></span> Ubah</button> <button class='delete-modal btn btn-danger btn-sm' data-id='" + data.id + "' data-name='" + data.nama + "' ><span class='glyphicon glyphicon-trash'><i class='fas fa-trash-alt'></i></span> Hapus</button></td></tr>");
                                     }
                     });
                 });
             });
 {{-- SCRIPT --}}
+// COBA
+        function changeProfile() {
+                $('#file').click();
+            }
+            $('#file').change(function () {
+                if ($(this).val() != '') {
+                    upload(this);
+
+                }
+            });
+            function upload(img) {
+                var form_data = new FormData();
+                form_data.append('file', img.files[0]);
+                form_data.append('_token', '{{csrf_token()}}');
+                $('#loading').css('display', 'block');
+
+                $.ajax({
+                    url: "{{url('ajax-image-upload')}}",
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        // console.log(data);
+                        if (data.fail) {
+                            $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
+                            alert(data.errors['file']);
+                        }
+                        else {
+                            $('#file_name').val(data);
+                            $('#preview_image').attr('src', '{{asset('uploads')}}/' + data);
+                        }
+                        $('#loading').css('display', 'none');
+                    },
+                    error: function (xhr, status, error) {
+                        alert(xhr.responseText);
+                        $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
+                    }
+                });
+            }
+            function removeFile() {
+                if ($('#file_name').val() != '')
+                    if (confirm('Hapus foto profil?')) {
+                        $('#loading').css('display', 'block');
+                        var form_data = new FormData();
+                        form_data.append('_method', 'DELETE');
+                        form_data.append('_token', '{{csrf_token()}}');
+                        $.ajax({
+                            url: "ajax-remove-image/" + $('#file_name').val(),
+                            data: form_data,
+                            type: 'POST',
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
+                                $('#file_name').val('');
+                                $('#loading').css('display', 'none');
+                            },
+                            error: function (xhr, status, error) {
+                                alert(xhr.responseText);
+                            }
+                        });
+                    }
+            }
+            
+// COBA
 
         </script>
         <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>

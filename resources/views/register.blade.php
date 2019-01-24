@@ -9,10 +9,9 @@
 	<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/myscript.js') }}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
 	<style type="text/css">
-	*{
-		box-shadow: 1px #eee;
-	}
+	
 	.mycenter{
 		margin: 0 auto;
 	}
@@ -41,7 +40,7 @@
 			<center>
 			    <br/><br/>
 			    <div style="width:250px;height: 250px;text-align: center;position: relative" id="image">
-			        <img style="border-radius: 50%;" width="100%" height="100%" id="preview_image" src="{{asset('images/noimage.png')}}"/>
+			        <img style="border-radius: 50%;" width="100%" height="100%" id="preview_image" src="{{asset('images/no_avatar.jpg')}}"/>
 			        <i id="loading" class="fa fa-spinner fa-spin fa-3x fa-fw" style="position: absolute;left: 40%;top: 40%;display: none"></i>
 			    </div>
 			    <p class="mt-2">
@@ -72,7 +71,7 @@
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<form method="POST" class="form_penduduk">
+					<form method="POST" class="form_penduduk" id="form">
 						<input type="hidden" id="file_name" name="gambar" />
 						<div class="form-group">
 							<label for="name">Nama</label>
@@ -164,7 +163,7 @@
 						$('#kota').val('');
 						$('#kota').html('<option value="" disabled selected value>-- Pilih Kota --</option>');
 						$('#kecamatan').html('<option value=""disabled selected value>-- Pilih kecamatan --</option>');
-						$('#kelurahan').html('<option value=""disabled selected value-- >-- Pilih -- kelurahan --</option>');
+						$('#kelurahan').html('<option value=""disabled selected value>-- Pilih kelurahan --</option>');
 						$('#kecamatan').val('');
 						$('#kelurahan').val('');
 
@@ -262,7 +261,7 @@
       	               
       	               alert("Registrasi sukses !");
       	               // window.location.href = "http://localhost/formajax/public/penduduk";
-      	               $('#preview_image').attr('src', '{{asset('images/noimage.png')}}');
+      	               $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
       	               $('#kota').val('');
       	               $('option:selected').val('');
       	               $('#provinsi').val('');
@@ -308,7 +307,7 @@
 		            success: function (data) {
 		            	// console.log(data);
 		                if (data.fail) {
-		                    $('#preview_image').attr('src', '{{asset('images/noimage.png')}}');
+		                    $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
 		                    alert(data.errors['file']);
 		                }
 		                else {
@@ -319,7 +318,7 @@
 		            },
 		            error: function (xhr, status, error) {
 		                alert(xhr.responseText);
-		                $('#preview_image').attr('src', '{{asset('images/noimage.png')}}');
+		                $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
 		            }
 		        });
 		    }
@@ -337,7 +336,7 @@
 		                    contentType: false,
 		                    processData: false,
 		                    success: function (data) {
-		                        $('#preview_image').attr('src', '{{asset('images/noimage.png')}}');
+		                        $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
 		                        $('#file_name').val('');
 		                        $('#loading').css('display', 'none');
 		                    },
@@ -348,6 +347,71 @@
 		            }
 		    }
 // COBA
+	jQuery(function ($) {
+	    $('#form').validate({
+	        rules: {
+	            nama: {
+	                required: true,
+	                minlength: 2,
+	                maxlength: 20,
+	                lettersonly: true
+	            },
+	            nik: {
+	                required: true,
+	                minlength: 9,
+	                maxlength: 9,
+	                nowhitespace: true
+	            },
+	            no_kk: {
+	                required: true
+	            },
+	            tempat_lahir: {
+	                required: true
+	                // minlength: 10,
+	                // maxlength: 13
+	                // digits: true
+	            },
+	            alamat: {
+	                required: true,
+	                minlength: 10,
+	            },
+	            tanggal_lahir: {
+	                required: true
+	                // minlength: 6
+	                // email: falase
+	            }
+	        },
+	        messages: {
+	            nama: {
+	                required: "Tolong masukkan nama Anda",
+	                minlength: "Nama harus lebih dari 2 karakter",
+	                maxlength: "Nama harus kurang dari 20 karakter",
+	                lettersonly: "Nama hanya mengandung huruf"
+	            },
+	            nik: {
+	                required: "Masukkan NIK Anda",
+	                minlength: "NIK harus 9 karakter",
+	                maxlength: "NIK harus 9 karakter",
+	                nowhitespace: "tidak boleh mengandung spasi"
+	            },
+	            no_kk: {
+	                required: "masukkan nomor kk",
+	            },
+	            tempat_lahir: {
+	                required: "Masukkan tanggal lahir Anda"
+	            },
+	            tanggal_lahir: {
+	                required: "Masukkan tanggal lahir Anda"
+	                // minlength: "Address should be more than 10 characters",
+	            },
+	            alamat: {
+	                required: "Masukkan alamat Anda",
+	                // minlength: "Password should be more than 6 characters",
+	                // email: "Please enter a valid email address"
+	            }
+	        },
+	    });
+	});
 	</script>
 </body>
 </html>
