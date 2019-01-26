@@ -16,28 +16,53 @@
     {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> --}}
     <style type="text/css">
 
-        body{
-             background: linear-gradient(to top right, #0033cc 0%, #66ccff 101%);
-             background-size: cover;
-             background-repeat: no-repeat;
-             padding-bottom: 1000px;
-        }
-        table{
-            color: white;
-            font-size: 18px;
-        }
-        button{
-            color: white;
-        }
-        h1{
-            color: white;
-        }
-        img{
-            border-radius: 50%;
-        }
-    </style>
+    body{
+       background: linear-gradient(to top right, #0033cc 0%, #66ccff 101%);
+       background-size: cover;
+       background-repeat: no-repeat;
+       padding-bottom: 1000px;
+   }
+   table{
+    color: white;
+    font-size: 18px;
+}
+button{
+    color: white;
+}
+h1{
+    color: white;
+}
+img{
+    border-radius: 50%;
+}
+</style>
 </head>
 <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <tbody>
+                        @if ($post->count() > 0)
+                        @foreach ($post as $posts)
+                        <tr>
+                            <td>{{ $posts->title }}</td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <tr>
+                            <td>Tidak ada data</td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 
 {{-- JUDUL --}}
 <h1 class="text-center pt-5">Tabel Penduduk</h1>
@@ -45,266 +70,271 @@
 
 
 {{-- TABEL PENDUDUK --}}
-    <div class="container">
-         {{ csrf_field() }}
-         <div class="table-responsive text-center">
-                    <table class="table table-borderless" id="table">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Profil</th>
-                                {{-- <th class="text-center">Id</th> --}}
-                                <th class="text-center">Nama</th>
-                                <th class="text-center">Jenis Kelamin</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        @php
-                            $i = 1;
-                        @endphp
-                        @foreach($penduduks as $item)
-                        <tr class="item{{$item->id}}">
-                            <td>
-                                    <img src="{{ asset("uploads/{$item->gambar}") }}" width="80px" height="80px" style="background-size: cover;" />
-                            </td>
-                            {{-- <td>{{$item->id}}</td> --}}
-                            <td style="vertical-align: middle;">{{$item->nama}}</td>
-                            <td style="vertical-align: middle;">{{$item->jenis_kelamin}}</td>
-                            <td style="vertical-align: middle;"><button class="edit-modal btn btn-info btn-sm" data-id="{{$item->id}}"
-                                    data-name="{{$item->nama}}" data-nik="{{$item->nik}}" data-nokk="{{$item->no_kk}}" data-jeniskelamin="{{$item->jenis_kelamin}}" data-tempatlahir="{{$item->tempat_lahir}}" data-tanggallahir="{{$item->tanggal_lahir}}" data-alamat="{{$item->alamat}}" data-gambar="{{$item->gambar}}">
-                                    <span class="glyphicon glyphicon-edit"><i class="fas fa-edit"></i></span> Ubah
-                                </button>
-                                <button class="delete-modal btn btn-danger btn-sm"
-                                    data-id="{{$item->id}}" data-name="{{$item->nama}}">
-                                    <span class="glyphicon glyphicon-trash"><i class="fas fa-trash-alt"></i></span> Hapus
-                                </button></td>
-                        </tr>
-                        @php
-                            $i++
-                        @endphp
-                        @endforeach
-                    </table>
-                </div>
-    </div>
+<div class="container">
+   {{ csrf_field() }}
+   <div class="table-responsive text-center">
+    <table class="table table-borderless" id="table">
+        <thead>
+            <tr>
+                <th class="text-center">Profil</th>
+                {{-- <th class="text-center">Id</th> --}}
+                <th class="text-center">Nama</th>
+                <th class="text-center">Jenis Kelamin</th>
+                <th class="text-center">Aksi</th>
+            </tr>
+        </thead>
+
+
+        @if ($post->count() > 0)
+        @foreach($post as $item)
+        <tr class="item{{$item->id}}">
+            <td>
+                <img src="{{ asset("uploads/{$item->gambar}") }}" width="80px" height="80px" style="overflow: hidden;" />
+            </td>
+            {{-- <td>{{$item->id}}</td> --}}
+            <td style="vertical-align: middle;">{{$item->nama}}</td>
+            <td style="vertical-align: middle;">{{$item->jenis_kelamin}}</td>
+            <td style="vertical-align: middle;"><button class="edit-modal btn btn-info btn-sm" data-id="{{$item->id}}"
+                data-name="{{$item->nama}}" data-nik="{{$item->nik}}" data-nokk="{{$item->no_kk}}" data-jeniskelamin="{{$item->jenis_kelamin}}" data-tempatlahir="{{$item->tempat_lahir}}" data-tanggallahir="{{$item->tanggal_lahir}}" data-alamat="{{$item->alamat}}" data-gambar="{{$item->gambar}}">
+                <span class="glyphicon glyphicon-edit"><i class="fas fa-edit"></i></span> Ubah
+            </button>
+            <button class="delete-modal btn btn-danger btn-sm"
+            data-id="{{$item->id}}" data-name="{{$item->nama}}">
+            <span class="glyphicon glyphicon-trash"><i class="fas fa-trash-alt"></i></span> Hapus
+        </button></td>
+    </tr>
+
+    @endforeach
+    @else
+    <tr>
+        <td>Tidak ada data</td>
+    </tr>
+    @endif
+
+</table>
+<div class="container" style="position: absolute; top: 1300px;">{{ $post->links() }}</div>
+</div>
+</div>
 {{-- TABEL PENDUDUK --}}
 
 {{-- MODAL --}}
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <span><button type="button" class="close" data-dismiss="modal">&times;</button></span>
-                </div>
-                <div class="modal-body">
-                  <div id="modal-gambar">  
-                    <center>
-                        <div style="width:100px;height: 100px;text-align: center;position: relative" id="image">
-                            <img style="border-radius: 50%;" width="100%" height="100%" id="preview_image"/>
-                            <i id="loading" class="fa fa-spinner fa-spin fa-3x fa-fw" style="position: absolute;left: 40%;top: 40%;display: none"></i>
-                        </div>
-                        <p class="mt-2">
-                            <a href="javascript:changeProfile()" style="text-decoration: none; font-size: 12px;">
-                                <i class="fa fa-camera upload-button"></i> Ganti Profil
-                            </a>&nbsp;&nbsp;
-                            <a href="javascript:removeFile()" style="text-decoration: none; color: red; font-size: 12px;">
-                                <i class="fa fa-trash"></i> Hapus
-                                
-                            </a>
-                        </p>
-                        <input type="file" id="file" name="img" style="display: none"/>
-                        
-                    </center>
-                  </div>  
-                    <form class="form-horizontal" role="form">
-                        <input type="hidden" id="file_name" name="gambar" />
-                        <div class="form-group">
-                            <label class="control-label col-sm-5" for="id">ID:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="fid" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-5" for="name">Nama</label>
-                            <div class="col-sm-10">
-                                <input id="n" name="nama" type="text" class="form-control" id="name" placeholder="nama Anda">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-5" for="nik">Nik</label>
-                            <div class="col-sm-10">
-                                <input name="nik" type="number" class="form-control" id="nik" placeholder="Nomor induk kependudukan">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-5" for="no_kk">No. KK</label>
-                            <div class="col-sm-10">
-                                <input name="no_kk" type="number" class="form-control" id="no_kk" placeholder="Nomor kartu keluarga">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-5" for="tempat_lahir">Tempat Lahir</label>
-                            <div class="col-sm-10">
-                                <input name="tempat_lahir" type="text" class="form-control" id="tempat_lahir" placeholder="tempat lahir">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-5" for="tanggal_lahir">Tanggal Lahir</label>
-                            <div class="col-sm-10">
-                                <input name="tanggal_lahir" type="date" class="form-control" id="tanggal_lahir" placeholder="dd/mm/yy">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-5" for="gender">Jenis kelamin</label>
-                            <div class="col-sm-10">
-                                <select name="jenis_kelamin" class="form-control" id="gender">
-                                <option disabled selected value>-- Pilih Jenis Kelamin</option>
-                                <option value="laki-laki">laki-laki</option>
-                                <option value="perempuan">perempuan</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-5" for="alamat">Alamat Lengkap</label>
-                            <div class="col-sm-10">
-                                <textarea name="alamat_lengkap" class="form-control" id="alamat" rows="3" placeholder="alamat"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="deleteContent">
-                        Apakah Anda yakin menghapus <b><span class="dname"></span></b> ? <span
-                            class="hidden did"></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn actionBtn" data-dismiss="modal">
-                            <span id="footer_action_button" class='glyphicon'> </span>
-                        </button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'><i class="fas fa-times"></i></span> Batal
-                        </button>
-                    </div>
-                </div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <span><button type="button" class="close" data-dismiss="modal">&times;</button></span>
             </div>
-          </div>
+            <div class="modal-body">
+              <div id="modal-gambar">  
+                <center>
+                    <div style="width:100px;height: 100px;text-align: center;position: relative" id="image">
+                        <img style="border-radius: 50%;" width="100%" height="100%" id="preview_image"/>
+                        <i id="loading" class="fa fa-spinner fa-spin fa-3x fa-fw" style="position: absolute;left: 40%;top: 40%;display: none"></i>
+                    </div>
+                    <p class="mt-2">
+                        <a href="javascript:changeProfile()" style="text-decoration: none; font-size: 12px;">
+                            <i class="fa fa-camera upload-button"></i> Ganti Profil
+                        </a>&nbsp;&nbsp;
+                        <a href="javascript:removeFile()" style="text-decoration: none; color: red; font-size: 12px;">
+                            <i class="fa fa-trash"></i> Hapus
+
+                        </a>
+                    </p>
+                    <input type="file" id="file" name="img" style="display: none"/>
+
+                </center>
+            </div>  
+            <form class="form-horizontal" role="form">
+                <input type="hidden" id="file_name" name="gambar" />
+                <div class="form-group">
+                    <label class="control-label col-sm-5" for="id">ID:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="fid" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-5" for="name">Nama</label>
+                    <div class="col-sm-10">
+                        <input id="n" name="nama" type="text" class="form-control" id="name" placeholder="nama Anda">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-5" for="nik">Nik</label>
+                    <div class="col-sm-10">
+                        <input name="nik" type="number" class="form-control" id="nik" placeholder="Nomor induk kependudukan">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-5" for="no_kk">No. KK</label>
+                    <div class="col-sm-10">
+                        <input name="no_kk" type="number" class="form-control" id="no_kk" placeholder="Nomor kartu keluarga">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-5" for="tempat_lahir">Tempat Lahir</label>
+                    <div class="col-sm-10">
+                        <input name="tempat_lahir" type="text" class="form-control" id="tempat_lahir" placeholder="tempat lahir">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-5" for="tanggal_lahir">Tanggal Lahir</label>
+                    <div class="col-sm-10">
+                        <input name="tanggal_lahir" type="date" class="form-control" id="tanggal_lahir" placeholder="dd/mm/yy">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-5" for="gender">Jenis kelamin</label>
+                    <div class="col-sm-10">
+                        <select name="jenis_kelamin" class="form-control" id="gender">
+                            <option disabled selected value>-- Pilih Jenis Kelamin</option>
+                            <option value="laki-laki">laki-laki</option>
+                            <option value="perempuan">perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-5" for="alamat">Alamat Lengkap</label>
+                    <div class="col-sm-10">
+                        <textarea name="alamat_lengkap" class="form-control" id="alamat" rows="3" placeholder="alamat"></textarea>
+                    </div>
+                </div>
+            </form>
+            <div class="deleteContent">
+                Apakah Anda yakin menghapus <b><span class="dname"></span></b> ? <span
+                class="hidden did"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn actionBtn" data-dismiss="modal">
+                    <span id="footer_action_button" class='glyphicon'> </span>
+                </button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                    <span class='glyphicon glyphicon-remove'><i class="fas fa-times"></i></span> Batal
+                </button>
+            </div>
         </div>
+    </div>
+</div>
+</div>
 {{-- MODAL --}}
 
 {{-- SCRIPT --}}
-        <script type="text/javascript">
-            $(document).ready(function() {
-              $(document).on('click', '.edit-modal', function() {
-                    $('#modal-gambar').css('display', 'block');
-                    $('#footer_action_button').text("Perbarui");
-                    $('#footer_action_button').addClass('glyphicon-check');
-                    $('#footer_action_button').removeClass('glyphicon-trash');
-                    $('#footer_action_button').html('<i class="fas fa-check"></i>Perbarui');
-                    $('.actionBtn').addClass('btn-success');
-                    $('.actionBtn').removeClass('btn-danger');
-                    $('.actionBtn').addClass('edit');
-                    $('.modal-title').text('Ubah');
-                    $('.deleteContent').hide();
-                    $('.form-horizontal').show();
-                    $('#fid').val($(this).data('id'));
-                    $('#n').val($(this).data('name'));
-                    $('#nik').val($(this).data('nik'));
-                    $('#no_kk').val($(this).data('nokk'));
-                    $('#tempat_lahir').val($(this).data('tempatlahir'));
-                    $('#tanggal_lahir').val($(this).data('tanggallahir'));
-                    $('#gender').val($(this).data('jeniskelamin'));
-                    $('#alamat').val($(this).data('alamat'));
-                     var namagambar = 'uploads/'+($(this).data('gambar'));
-                    $('#preview_image').attr('src', namagambar);
-                    $('#file_name').val($(this).data('gambar'));
-                    $('#myModal').modal('show');
-                });
-                $(document).on('click', '.delete-modal', function() {
-                    $('#modal-gambar').css('display', 'none');
-                    $('#footer_action_button').text(" Hapus");
-                    $('#footer_action_button').removeClass('glyphicon-check');
-                    $('#footer_action_button').addClass('glyphicon-trash');
-                    $('#footer_action_button').html('<i class="fas fa-trash-alt"></i>Hapus');
-                    $('.actionBtn').removeClass('btn-success');
-                    $('.actionBtn').addClass('btn-danger');
-                    $('.actionBtn').addClass('delete');
-                    $('.modal-title').text('Hapus');
-                    $('.did').text($(this).data('id'));
-                    $('.deleteContent').show();
-                    $('.form-horizontal').hide();
-                    $('.dname').html($(this).data('name'));
-                    $('#myModal').modal('show');
-                });
+<script type="text/javascript">
+    $(document).ready(function() {
+      $(document).on('click', '.edit-modal', function() {
+        $('#modal-gambar').css('display', 'block');
+        $('#footer_action_button').text("Perbarui");
+        $('#footer_action_button').addClass('glyphicon-check');
+        $('#footer_action_button').removeClass('glyphicon-trash');
+        $('#footer_action_button').html('<i class="fas fa-check"></i>Perbarui');
+        $('.actionBtn').addClass('btn-success');
+        $('.actionBtn').removeClass('btn-danger');
+        $('.actionBtn').addClass('edit');
+        $('.modal-title').text('Ubah');
+        $('.deleteContent').hide();
+        $('.form-horizontal').show();
+        $('#fid').val($(this).data('id'));
+        $('#n').val($(this).data('name'));
+        $('#nik').val($(this).data('nik'));
+        $('#no_kk').val($(this).data('nokk'));
+        $('#tempat_lahir').val($(this).data('tempatlahir'));
+        $('#tanggal_lahir').val($(this).data('tanggallahir'));
+        $('#gender').val($(this).data('jeniskelamin'));
+        $('#alamat').val($(this).data('alamat'));
+        var namagambar = 'uploads/'+($(this).data('gambar'));
+        $('#preview_image').attr('src', namagambar);
+        $('#file_name').val($(this).data('gambar'));
+        $('#myModal').modal('show');
+    });
+      $(document).on('click', '.delete-modal', function() {
+        $('#modal-gambar').css('display', 'none');
+        $('#footer_action_button').text(" Hapus");
+        $('#footer_action_button').removeClass('glyphicon-check');
+        $('#footer_action_button').addClass('glyphicon-trash');
+        $('#footer_action_button').html('<i class="fas fa-trash-alt"></i>Hapus');
+        $('.actionBtn').removeClass('btn-success');
+        $('.actionBtn').addClass('btn-danger');
+        $('.actionBtn').addClass('delete');
+        $('.modal-title').text('Hapus');
+        $('.did').text($(this).data('id'));
+        $('.deleteContent').show();
+        $('.form-horizontal').hide();
+        $('.dname').html($(this).data('name'));
+        $('#myModal').modal('show');
+    });
 
-                $('.modal-footer').on('click', '.delete', function() {
-                    var id = $('.did').text();
-                    console.log(id);
-                    var token = $(this).data("token");
-                            $.ajaxSetup({
-                              headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                              }
-                            });
-                            $.ajax(
-                            {
-                                url: "http://localhost/formajax/public/user/delete/"+id,
-                                type: 'delete',
-                                data: {
-                                    '_token': $('input[name=_token]').val(),
-                                    'id': $('.did').text()
-                                },
-                                success: function(data) {
-                                    $('.item' + $('.did').text()).remove();
-                                }
-                            });
-
-                });
-                $('.modal-footer').on('click', '.edit', function() {
-                    var id = $('#fid').val();
-                    $.ajax({
-                        type: 'post',
-                        url: 'http://localhost/formajax/public/user/edit/'+id,
-                        data: {
-                            '_token': $('input[name=_token]').val(),
-                            'gambar':$('#file_name').val(),
-                            'id': $("#fid").val(),
-                            'nama': $('#n').val(),
-                            'nik': $('#nik').val(),
-                            'no_kk': $('#no_kk').val(),
-                            'tempat_lahir': $('#tempat_lahir').val(),
-                            'tanggal_lahir': $('#tanggal_lahir').val(),
-                            'jenis_kelamin': $('#gender').val(),
-                            'alamat': $('#alamat').val(),
-
-                        },
-                        success: function(data) {
-                                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td><img width='80px' height='80px' style='vertical-align: middle;' src=uploads/"+ data.gambar + "></td>  <td  style='vertical-align: middle;'> " + data.nama + "</td><td style='vertical-align: middle;'>" + data.jenis_kelamin + "</td><td style='vertical-align: middle;'><button class='edit-modal btn btn-info btn-sm' data-id='" + data.id + "' data-name='" + data.nama + "' data-nik='" + data.nik + "' data-nokk='" + data.no_kk + "' data-tempatlahir='" + data.tempat_lahir + "' data-tanggallahir='" + data.tanggal_lahir + "'data-jeniskelamin='" + data.jenis_kelamin + "' data-alamat='" + data.alamat + "' data-gambar='" + data.gambar + "'><span class='glyphicon glyphicon-edit'><i class='fas fa-edit'></i></span> Ubah</button> <button class='delete-modal btn btn-danger btn-sm' data-id='" + data.id + "' data-name='" + data.nama + "' ><span class='glyphicon glyphicon-trash'><i class='fas fa-trash-alt'></i></span> Hapus</button></td></tr>");
-                                    }
-                    });
-                });
-            });
-{{-- SCRIPT --}}
-// COBA
-        function changeProfile() {
-                $('#file').click();
+      $('.modal-footer').on('click', '.delete', function() {
+        var id = $('.did').text();
+        console.log(id);
+        var token = $(this).data("token");
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+        $.ajax(
+        {
+            url: "http://localhost/formajax/public/user/delete/"+id,
+            type: 'delete',
+            data: {
+                '_token': $('input[name=_token]').val(),
+                'id': $('.did').text()
+            },
+            success: function(data) {
+                $('.item' + $('.did').text()).remove();
             }
-            $('#file').change(function () {
-                if ($(this).val() != '') {
-                    upload(this);
+        });
 
-                }
-            });
-            function upload(img) {
-                var form_data = new FormData();
-                form_data.append('file', img.files[0]);
-                form_data.append('_token', '{{csrf_token()}}');
-                $('#loading').css('display', 'block');
+    });
+      $('.modal-footer').on('click', '.edit', function() {
+        var id = $('#fid').val();
+        $.ajax({
+            type: 'post',
+            url: 'http://localhost/formajax/public/user/edit/'+id,
+            data: {
+                '_token': $('input[name=_token]').val(),
+                'gambar':$('#file_name').val(),
+                'id': $("#fid").val(),
+                'nama': $('#n').val(),
+                'nik': $('#nik').val(),
+                'no_kk': $('#no_kk').val(),
+                'tempat_lahir': $('#tempat_lahir').val(),
+                'tanggal_lahir': $('#tanggal_lahir').val(),
+                'jenis_kelamin': $('#gender').val(),
+                'alamat': $('#alamat').val(),
 
-                $.ajax({
-                    url: "{{url('ajax-image-upload')}}",
-                    data: form_data,
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
+            },
+            success: function(data) {
+                $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td><img width='80px' height='80px' style='vertical-align: middle;' src=uploads/"+ data.gambar + "></td>  <td  style='vertical-align: middle;'> " + data.nama + "</td><td style='vertical-align: middle;'>" + data.jenis_kelamin + "</td><td style='vertical-align: middle;'><button class='edit-modal btn btn-info btn-sm' data-id='" + data.id + "' data-name='" + data.nama + "' data-nik='" + data.nik + "' data-nokk='" + data.no_kk + "' data-tempatlahir='" + data.tempat_lahir + "' data-tanggallahir='" + data.tanggal_lahir + "'data-jeniskelamin='" + data.jenis_kelamin + "' data-alamat='" + data.alamat + "' data-gambar='" + data.gambar + "'><span class='glyphicon glyphicon-edit'><i class='fas fa-edit'></i></span> Ubah</button> <button class='delete-modal btn btn-danger btn-sm' data-id='" + data.id + "' data-name='" + data.nama + "' ><span class='glyphicon glyphicon-trash'><i class='fas fa-trash-alt'></i></span> Hapus</button></td></tr>");
+            }
+        });
+    });
+  });
+{{-- SCRIPT --}}
+
+// COBA
+function changeProfile() {
+    $('#file').click();
+}
+$('#file').change(function () {
+    if ($(this).val() != '') {
+        upload(this);
+    }
+});
+function upload(img) {
+    var form_data = new FormData();
+    form_data.append('file', img.files[0]);
+    form_data.append('_token', '{{csrf_token()}}');
+    $('#loading').css('display', 'block');
+
+    $.ajax({
+        url: "{{url('ajax-image-upload')}}",
+        data: form_data,
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        success: function (data) {
                         // console.log(data);
                         if (data.fail) {
                             $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
@@ -321,38 +351,61 @@
                         $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
                     }
                 });
-            }
-            function removeFile() {
-                if ($('#file_name').val() != '')
-                    if (confirm('Hapus foto profil?')) {
-                        $('#loading').css('display', 'block');
-                        var form_data = new FormData();
-                        form_data.append('_method', 'DELETE');
-                        form_data.append('_token', '{{csrf_token()}}');
-                        $.ajax({
-                            url: "ajax-remove-image/" + $('#file_name').val(),
-                            data: form_data,
-                            type: 'POST',
-                            contentType: false,
-                            processData: false,
-                            success: function (data) {
-                                $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
-                                $('#file_name').val('');
-                                $('#loading').css('display', 'none');
-                            },
-                            error: function (xhr, status, error) {
-                                alert(xhr.responseText);
-                            }
-                        });
+}
+function removeFile() {
+    if ($('#file_name').val() != '')
+        if (confirm('Hapus foto profil?')) {
+            $('#loading').css('display', 'block');
+            var form_data = new FormData();
+            form_data.append('_method', 'DELETE');
+            form_data.append('_token', '{{csrf_token()}}');
+            $.ajax({
+                url: "ajax-remove-image/" + $('#file_name').val(),
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $('#preview_image').attr('src', '{{asset('images/no_avatar.jpg')}}');
+                    $('#file_name').val('');
+                    $('#loading').css('display', 'none');
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    $(document).ready(function(){
+
+             // $(document).on('click', '.pagination a', function(event){
+             //  event.preventDefault(); 
+             //  var page = $(this).attr('href').split('page=')[1];
+             //  fetch_data(page);
+             // });
+
+             function fetch_data(page)
+             {
+                var page = $(this).attr('href').split('page=')[1];
+                console.log(page);
+                $.ajax(
+                {
+                    url: "http://localhost/formajax/public/penduduk?page="+page,
+                    type: 'get',
+                    success: function(data) {
+                        $('.item' + $('.did').text()).remove();
                     }
+                });
             }
-            
+
+        });
 // COBA
 
-        </script>
-        <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+</script>
+<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
 
 </body>
 </html>

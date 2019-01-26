@@ -20,7 +20,7 @@ Route::get('/asd', 'formController@Register');
 Route::get('myform', 'formController@myform');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'formController@selectAjax']);
 
-Route::get('/register', 'formController@index');
+Route::get('/register', 'formController@xml_get_current_byte_index(parser)');
 
 Route::get('register/fetch', 'formController@fetch')->name('register.fetch');
 
