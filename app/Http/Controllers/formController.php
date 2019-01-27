@@ -28,8 +28,8 @@ class formController extends Controller
         $customMessages = [
             'required' => 'Harap isi :attribute',
             'unique' => ':attribute sudah dipakai',
-            'max' => ':attribute maksimal',
-            'min' => ':attribute minimal',
+            'max' => ':attribute maksimal 25',
+            'min' => ':attribute minimal 5',
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -91,7 +91,7 @@ class formController extends Controller
 
     $post = \App\penduduk::paginate(10);
 
-    return view('penduduk', compact('post'), $arr);
+    return view('penduduk', compact('post'));
 }
 public function editPenduduk(Request $request, $id)
 {   

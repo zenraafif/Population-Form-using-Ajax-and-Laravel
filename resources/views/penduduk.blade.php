@@ -49,10 +49,6 @@ img{
                             <td>{{ $posts->title }}</td>
                         </tr>
                         @endforeach
-                        @else
-                        <tr>
-                            <td>Tidak ada data</td>
-                        </tr>
                         @endif
                     </tbody>
                 </table>
@@ -377,33 +373,34 @@ function removeFile() {
         }
     }
 
-    $(document).ready(function(){
-
-             // $(document).on('click', '.pagination a', function(event){
-             //  event.preventDefault(); 
-             //  var page = $(this).attr('href').split('page=')[1];
-             //  fetch_data(page);
-             // });
-
-             function fetch_data(page)
-             {
-                var page = $(this).attr('href').split('page=')[1];
-                console.log(page);
-                $.ajax(
-                {
-                    url: "http://localhost/formajax/public/penduduk?page="+page,
-                    type: 'get',
-                    success: function(data) {
-                        $('.item' + $('.did').text()).remove();
-                    }
-                });
+    function ajaxLoad(url, content) {
+        // content is an id of div. And it is used for showing the updated data after deleting.
+        // if you not specify, it will use div with id "content"
+        content = typeof content !== 'undefined' ? content : 'content';
+        $('.loading').show();
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: false,
+            success: function (data) {
+                $("#" + content).html(data);
+                $('.loading').hide();
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
             }
-
         });
+    }
+    $(document).on('click', 'a.page-link', function (event) {
+        event.preventDefault();
+        var atribut = ajaxLoad($(this).attr('href'));
+
+        console.log(atribut);
+
+    });
 // COBA
 
 </script>
-<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
 
