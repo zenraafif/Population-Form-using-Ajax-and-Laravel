@@ -152,4 +152,31 @@ public function fetch(Request $request)
   echo $output;
 }
 
+
+
+
+function indexs()
+   {
+    $data = DB::table('penduduk')->orderBy('id', 'asc')->paginate(5);
+    return view('penduduk', compact('data'));
+   }
+
+function fetch_data(Request $request)
+   {
+    if($request->ajax())
+    {
+     $sort_by = $request->get('sortby');
+     $sort_type = $request->get('sorttype');
+           $query = $request->get('query');
+           $query = str_replace(" ", "%", $query);
+     $data = DB::table('penduduk')
+                   ->where('id', 'like', '%'.$query.'%')
+                   ->orWhere('nama', 'like', '%'.$query.'%')
+                   ->orWhere('jenis_kelamin', 'like', '%'.$query.'%')
+                   ->orderBy($sort_by, $sort_type)
+                   ->paginate(5);
+     return view('data', compact('data'))->render();
+    }
+   }
+
 }

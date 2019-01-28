@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/mystyle.css') }}">
 	<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/jquery-3.3.1.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/myscript.js') }}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>

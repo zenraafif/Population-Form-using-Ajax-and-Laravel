@@ -47,7 +47,7 @@ Route::get('/kelurahan', 'ApiController@kelurahan');
 
 Route::post('/tambahPenduduk', 'formController@tambahPenduduk');
 
-Route::get('/penduduk', 'formController@tampilkanPenduduk');
+// Route::get('/penduduk', 'formController@tampilkanPenduduk');
 
 Route::post('/edit-penduduk', 'formController@editPenduduk');
 
@@ -61,3 +61,16 @@ Route::post('/user/edit/{id}', 'formController@editPenduduk');
 
 Route::match(['get', 'post'], 'ajax-image-upload', 'profileController@ajaxImage');
 Route::delete('ajax-remove-image/{filename}', 'profileController@deleteImage');
+
+
+
+
+
+
+
+
+
+
+Route::get('/penduduk', 'formController@indexs');
+
+Route::get('/penduduk/fetch_data', 'formController@fetch_data');
